@@ -1187,8 +1187,7 @@ def main():
             inputformat = GuessFormat(rawlines)
 
         if outputformat == "":
-            outputformat = inputformat;
-
+            outputformat = "subrip"
 
         lines = From(rawlines, inputformat)
 
