@@ -1,0 +1,6 @@
+2015-03-07 aw
+	* Add support for MPL2 format (input only)
+	* Add -e parameter for input/output encoding
+
+2015-03-07 aw
+	* Create as fork of http://sourceforge.net/projects/subconv/
