@@ -40,7 +40,8 @@ from sys import stdin, argv, stderr, stdout, exit
 import string
 import re
 import getopt
-
+import codecs
+import os.path
 
 # Exceptions definitions
 
@@ -101,6 +102,27 @@ def StrLenNoWhiteSpaces(str):
         if not (i in string.whitespace):
             length = length + 1
     return length
+
+def getExtensionForType(format):
+    if format=="" or format==None:
+        return "txt"
+    if format == "csv":
+        return "csv"
+    elif format == "microdvd":
+        return "csv"
+    elif format == "tmplayer":
+        return "tmpsub"
+    elif format == "subrip":
+        return "srt"
+    elif format == "subviewer":
+        return "sub"
+    elif format == "jacosub":
+        return "jss"
+    elif format == "mpl2":
+        return "mpl2"
+    else:
+        raise SubconvError("Unknown output format: '%s'.\n" % formatType)
+
 
 #count lasting time for one subtitle
 #it cares about minimal & maximal subs time
@@ -931,6 +953,8 @@ Switches:
  -o --outputfile   Assigns a filename to write data to. (default is stdout)
  -r --inputformat  Forces input format (normally program does auto-detection)
  -w --outputformat Selects output format (default is csv)
+ -e --encoding     Encoding used for reading input and writing output (default
+                   is UTF-8)
  -f --framerate    Set the framerate for reading/writing in MicroDVD format 
                    (default is 23.98 fps).
  -s --shift        Shifts subtitles by given value (in special time format)
@@ -1004,13 +1028,17 @@ def main():
     
     inputfile = stdin
     outputfile = stdout
+    inputfileName = None
+    outputfileName = None
     inputformat = ""
-    outputformat = ""
+    outputformat = "subrip"
+    encoding = 'utf-8-sig'
     
     try:
-        opts, args = getopt.getopt(argv[1:], "i:o:r:w:f:l:h?s:c:p:",
+        opts, args = getopt.getopt(argv[1:], "i:o:r:w:e:f:l:h?s:c:p:",
                                    ["inputfile=", "outputfile=",
-                                    "inputformat=", "outputformat=",                                    
+                                    "inputformat=", "outputformat=",
+                                    "encoding=",
                                     "lasttime=", "mintime=", "maxtime=",
                                     "split=", "splitsep=", "getsplit=",
                                     "shift=", "scale=", "smartscale=",
@@ -1024,21 +1052,17 @@ def main():
 
     try:
         for o, a in opts:
+            if o in ("-e", "--encoding"):
+                encoding = a
+
+        for o, a in opts:
             if o in ("-h", "-?", "--help"):
                 PrintHelp()
                 exit(0);
             if o in ("-i", "--inputfile"):
-                try:
-                    inputfile = file(a, "r")
-                except IOError:
-                    stderr.write("Cant open input file.\n")
-                    exit(1)
+                inputfileName = a
             elif o in ("-o", "--outputfile"):
-                try:
-                    outputfile = file(a, "w")
-                except IOError:
-                    stderr.write("Cant open output file.\n")
-                    exit(1)
+                outputfileName = a
             elif o in("-r", "--inputformat"):
                 inputformat = a
             elif o in ("-w", "--outputformat"):
@@ -1112,11 +1136,20 @@ def main():
                 else:
                     linesInSubtitle = int(a)
 
-    except SubconvError, e:               
+        if outputfileName is None and inputfileName is not None:
+            print outputformat, getExtensionForType(outputformat)
+            outputfileName = os.path.splitext(inputfileName)[0] + "." + getExtensionForType(outputformat)
+        if inputfileName <> None:
+            try:
+                inputfile = codecs.open(inputfileName, "r", encoding)
+            except IOError:
+                stderr.write("Cant open input file.\n")
+                exit(1)
+
+    except SubconvError as e:
         stderr.write(e.message()+"\n")
         PrintMiniHelp()
         exit(1)
-
 
     try:
         rawlines = ReadRawLines(inputfile)
@@ -1155,6 +1188,16 @@ def main():
 
         if lastingMode != "nomode" or doLastingTime:
             lines = countLastingTimeForAllSubs(lines)
+
+        if outputfileName <> None:
+            try:
+                if not os.path.isfile(outputfileName):
+                    outputfile = codecs.open(outputfileName, "w", encoding)
+                else:
+                    raise SubconvError("Output file: '%s' exists.\n" % outputfileName)
+            except IOError:
+                stderr.write("Cant open output file.\n")
+                exit(1)
 
         To(lines, outputformat, outputfile) #OK
 
