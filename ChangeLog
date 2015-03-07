@@ -1,0 +1,86 @@
+2005-12-28 00:14  ofca
+     * Added --linesinsub option (splits subtitles with more than n lines into shorter subs)
+     * Scale accepts a new frame rate as parameter 
+	
+2005-11-22 00:14  ofca
+     * Added --maxlinelen option (cuts subtitles' lines to given value)
+     * Added --newline option (unix or w32 EOL character to choose)
+
+2005-07-09 23:48  lucash
+     * Printing help to the stdout
+     * Default output format is the input format
+	
+2003-11-24 19:24  ofca
+
+     * Added --smartscale option (scale/shift based on time of first and last
+	                               subtitle)
+     * Scale is now applyed before shift. Hope it did not cause any new bugs.
+     * Removed one debug string.
+
+2003-11-23 23:16  ofca
+
+     * New option: removing parts of the lines matching regular expressions
+     * Prettier removing subtitles for deaf people (using this ^)
+	
+2003-10-07 19:07  ofca
+
+     * Added removing parts of subtitles intended for deaf people
+
+2003-10-04 13:55  lucash
+
+     * Added split function.
+     * Better error handling.
+     * Code cleanup.
+
+2003-04-07 22:12  ofca
+
+     * Added support for Jacosub.
+
+2003-01-02 01:23  ofca
+
+     * Bug Fixes:
+       - error handling in time format string conversion was buggy
+       - some other minor bugs removed
+
+     * Code cleanup:
+       - Exception Handling
+       - Data error notification
+
+2003-01-01 23:44  lucash
+
+     * Bug fixes:
+       - in subtitle lasting code
+       - better support for TMPlayer format
+       - More error checking for incorect time values (negative min/max lasting time)
+       - Probably some more...
+
+2002-12-24 03:16  ofca
+
+     * Lasting time and scale in main() replaced
+     * Subrip with more than 1 newline enabled
+     * Min and max time without lasting time enabled
+     * Some comments
+     * Using timeGuard const insted of 999..99
+
+2002-12-24 02:09  ofca
+
+     * Added minimal and maximal lasting time
+     * Improved counting of subtitles' lasting time
+     * Possibility of changing lasting time for all formats
+	! doesn't work for min & max time when lasting time not set
+	! we should replace scale with changing lasting time in main()
+	  (i forgot about it, but it may have sense)
+
+2002-12-23 22:22  lucash
+
+     * Removed some old bugs (made before not on cvs copy)
+     * Removed bug of cumulating time with -l option
+
+2002-12-16 18:00  lucash
+
+     * Imported sources
+
+2002-12-16 18:00  lucash
+
+     * Initial revision
+

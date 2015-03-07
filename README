@@ -1,0 +1,45 @@
+Subconv - a subtitle editing/converting tool.
+Copyright (C) 2002  Paulina Kania & Lukasz Osipiuk
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+				
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+WARNING: This script requires python 2.1 or higher.
+         if you have python 1.x installed as /usr/bin/python
+	 change first line of script to apropriate one.
+					    							    
+Installation Notes:
+
+UNIX:
+To install just copy file subconv.py somewhere in your PATH. Then set correct 
+access permissions for this file:
+
+something. like: chmod 755 subconv.py should be OK :)
+
+WINDOWS:
+Copy file subconv.py somewhere and use it with "python.exe subconv.py ...". 
+You probably want a batch written doing this or whatever.
+
+Usage Notes:
+
+You get help using -h switch. There is some info.
+
+By default program runs as a filter reading from stdin and writing to stdout.
+If you want to import subtitles to a spreadsheet program like Excel or 
+OpenOffice Calc, you can use csv output.
+
+If you have any questions/suggests/problems/...
+email l.osipiuk@zodiac.mimuw.edu.pl
+or    ofca@tls.pl
