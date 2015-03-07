@@ -420,7 +420,33 @@ def FromJacosub(rawlines):
     return lines
 #end FromJacosub
 
+def FromMPL2(rawlines):
+    global lastingMode
 
+    reobject = re.compile("^\[(\d+)\]\[(\d+)\](.*)")
+    temp = []
+    counter = 0
+    for line in rawlines:
+        counter = counter + 1
+        searchob = reobject.search(line)
+        if searchob:
+            tline = []
+            tline.append(int(searchob.group(1))*100)
+            tline.append(int(searchob.group(2))*100)
+            if searchob.group(3):
+                tline.append(string.split(searchob.group(3), '|'))
+            else:
+                tline.append("")
+            temp.append(tline)
+        else:
+            PrintFormatError("TMPlayer", counter, line)
+
+    #If user didnt specified any mode we use /s
+    if (lastingMode == "nomode"):
+        lastingMode = "subtit"
+
+    return temp  
+#end FromMPL2
 
 def From(rawlines, format):
     if format == "csv":
@@ -435,6 +461,8 @@ def From(rawlines, format):
         return FromSubviewer(rawlines)
     elif format == "jacosub":
         return FromJacosub(rawlines)
+    elif format == "mpl2":
+        return FromMPL2(rawlines)
     raise SubconvError("Format unknown: " + format)
 #end From
 
@@ -598,13 +626,14 @@ def ToNoTime(lines, output = stdout):
 # Tries to guess the format of data based on lines read from file
 def GuessFormat(rawlines):
     if (len(rawlines) == 0): #nie ma nic do roboty
-        raise SubconvError("Could not guess input subtitles format")
+        raise SubconvError("Could not guess input subtitles format (empty input)")
     
     subTypes = [["microdvd", "^{\d+}{\d+}.*"],
                 ["tmplayer", "^\d+:\d+:\d+:.*"],
                 ["subrip", "^\d+$"],
                 ["csv", "^\d+(?P<sep>[,;\t])\d+(?P=sep)(?:(?P<ciapek>[\"#'`])(?:.+)(?P=ciapek)|(?:.+))"],
-                ["subviewer", "^\[INFORMATION\]"]]
+                ["subviewer", "^\[INFORMATION\]"],
+                ["mpl2", "^\[\d+\]\[\d+\].*"]]
     subLen = len(subTypes)
     for i in range(subLen):
         reobject = re.compile(subTypes[i][1])
