@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/adamwasila/subconv.png?label=ready&title=Ready)](https://waffle.io/adamwasila/subconv)
 #Subconv
 
 This is fork of project subconv. It may be found here: http://sourceforge.net/projects/subconv/
